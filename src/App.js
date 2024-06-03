@@ -12,7 +12,17 @@ const KEY= 'f84fc31d';
 
 export default function App() {
   const [query, setQuery] = useState("");
-  const [watched, setWatched] = useState([]
+  const [watched, setWatched] = useState([
+    {
+      imdbID: "id",
+      Title: "sample",
+      Year: 2014,
+      Poster: "poster",
+      runtime: 58,
+      imdbRating: 3,
+      userRating: 3,
+    }
+  ]
     // JSON.parse(localStorage.getItem("Watched"))
   );
   const [selectedId, setSelectedId] = useState(null);
