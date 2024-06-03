@@ -45,7 +45,7 @@ export default function Moviedetails({selectedId,onCloseMovie,handleAdd,KEY})
   useEffect(() => {
     const fetchData = async () => {
     try {
-      const response = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`);
+      const response = await fetch(`http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_API_KEY}&i=${selectedId}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
