@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
+import axios from "axios";
 import StarRating from "./StarRating";
 
 export default function MovieDetails({ selectedId, onCloseMovie, handleAdd }) {
   const [movie, setMovie] = useState(null);
-  
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.code === "Escape") {
@@ -27,20 +29,30 @@ export default function MovieDetails({ selectedId, onCloseMovie, handleAdd }) {
 
   useEffect(() => {
     const fetchData = async () => {
+      setError(null);  // Reset error state
+      if (!selectedId) {
+        setError("No movie selected.");
+        return;
+      }
       try {
-        const response = await fetch(`http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_API_KEY}&i=${selectedId}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        const response = await axios.get(`https://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_API_KEY}&i=${selectedId}`);
+        const data = response.data;
+        if (data.Response === "False") {
+          throw new Error(data.Error);
         }
-        const data = await response.json();
         setMovie(data);
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
+        setError(error.message);
       }
     };
 
     fetchData();
   }, [selectedId]);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   if (!movie) {
     return <div>Loading...</div>;
