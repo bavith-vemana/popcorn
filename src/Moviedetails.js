@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
+import axios from "axios";
 import StarRating from "./StarRating";
 
 export default function MovieDetails({ selectedId, onCloseMovie, handleAdd }) {
@@ -34,11 +35,8 @@ export default function MovieDetails({ selectedId, onCloseMovie, handleAdd }) {
         return;
       }
       try {
-        const response = await fetch(`https://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_API_KEY}&i=${selectedId}`);
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        const data = await response.json();
+        const response = await axios.get(`https://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_API_KEY}&i=${selectedId}`);
+        const data = response.data;
         if (data.Response === "False") {
           throw new Error(data.Error);
         }
